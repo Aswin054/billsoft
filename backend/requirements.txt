@@ -1,5 +1,5 @@
 Flask
 Flask-CORS
-mysql-connector-python
 python-dotenv
 gunicorn
+reportlab
