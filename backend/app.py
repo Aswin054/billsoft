@@ -4,6 +4,7 @@ import sqlite3
 from datetime import datetime
 import json
 import io
+import os
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import inch
