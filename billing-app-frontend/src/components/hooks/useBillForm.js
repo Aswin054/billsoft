@@ -34,11 +34,14 @@ export const useBillForm = (partnerId, queryClient) => {
     { description: '', hsnCode: '', quantity: 1, unit: 'Nos', unitPrice: 0, gstRate: 5 }
   ])
 
-  const generateBillMutation = useMutation({
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+const generateBillMutation = useMutation({
     mutationFn: async (data) => {
-      const res = await axios.post(`http://localhost:5000/api/partners/${partnerId}/bills`, data)
+      const res = await axios.post(`${API_URL}/api/partners/${partnerId}/bills`, data)
       return res.data
-    },
+    }
+,
     onSuccess: () => {
       queryClient.invalidateQueries(['partner', partnerId])
       resetForm()

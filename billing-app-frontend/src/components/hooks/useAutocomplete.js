@@ -23,9 +23,11 @@ export const useAutocomplete = (partnerId) => {
   })
 
   useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    
     const fetchSuggestions = async (fieldName, stateKey) => {
       try {
-        const url = `http://localhost:5000/api/autocomplete/${fieldName}?partner_id=${partnerId}`
+        const url = `${API_URL}/api/autocomplete/${fieldName}?partner_id=${partnerId}`
         const res = await axios.get(url)
         const values = res.data.map(item => item.field_value)
         setSuggestions(prev => ({ ...prev, [stateKey]: values }))
@@ -33,6 +35,7 @@ export const useAutocomplete = (partnerId) => {
         console.error(`Error fetching ${fieldName} suggestions:`, error)
       }
     }
+
 
     if (partnerId) {
       fetchSuggestions('vendor_code', 'vendorCode')

@@ -108,10 +108,13 @@ export const useProductManagement = () => {
       return
     }
 
-    try {
-      const res = await axios.post('http://localhost:5000/api/units', {
-        name: newUnitName.trim()
-      })
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+try {
+  const res = await axios.post(`${API_URL}/api/units`, {
+    name: newUnitName.trim()
+  })
+
       setUnits(prev => [...prev, res.data.name].sort())
       setNewUnitName('')
       setShowAddUnit(false)
