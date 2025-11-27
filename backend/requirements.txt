@@ -3,3 +3,5 @@ Flask-CORS
 python-dotenv
 gunicorn
 reportlab
+Flask-SQLAlchemy
+psycopg2-binary
