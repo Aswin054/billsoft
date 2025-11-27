@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export const useProductManagement = () => {
+  // API URL - works for both local and deployed
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
   const [products, setProducts] = useState([])
   const [hsnCodes, setHsnCodes] = useState([])
   const [units, setUnits] = useState([])
@@ -19,40 +22,40 @@ export const useProductManagement = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/products')
+        const res = await axios.get(`${API_URL}/api/products`)
         setProducts(res.data.map(p => p.name).sort())
       } catch (error) {
         console.error('Error fetching products:', error)
       }
     }
     fetchProducts()
-  }, [])
+  }, [API_URL])
 
   // Fetch HSN codes
   useEffect(() => {
     const fetchHsnCodes = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/hsn-codes')
+        const res = await axios.get(`${API_URL}/api/hsn-codes`)
         setHsnCodes(res.data)
       } catch (error) {
         console.error('Error fetching HSN codes:', error)
       }
     }
     fetchHsnCodes()
-  }, [])
+  }, [API_URL])
 
   // Fetch units
   useEffect(() => {
     const fetchUnits = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/units')
+        const res = await axios.get(`${API_URL}/api/units`)
         setUnits(res.data.map(u => u.name).sort())
       } catch (error) {
         console.error('Error fetching units:', error)
       }
     }
     fetchUnits()
-  }, [])
+  }, [API_URL])
 
   const handleAddProduct = async () => {
     if (!newProductName.trim()) {
@@ -61,7 +64,7 @@ export const useProductManagement = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/products', {
+      const res = await axios.post(`${API_URL}/api/products`, {
         name: newProductName.trim().toUpperCase()
       })
       setProducts(prev => [...prev, res.data.name].sort())
@@ -69,10 +72,11 @@ export const useProductManagement = () => {
       setShowAddProduct(false)
       alert('Product added successfully!')
     } catch (error) {
+      console.error('Error adding product:', error)
       if (error.response?.status === 409) {
         alert('Product already exists!')
       } else {
-        alert('Failed to add product')
+        alert(`Failed to add product: ${error.message}`)
       }
     }
   }
@@ -84,7 +88,7 @@ export const useProductManagement = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/hsn-codes', {
+      const res = await axios.post(`${API_URL}/api/hsn-codes`, {
         code: newHsnCode.trim(),
         description: newHsnDescription.trim()
       })
@@ -94,10 +98,11 @@ export const useProductManagement = () => {
       setShowAddHsn(false)
       alert('HSN code added successfully!')
     } catch (error) {
+      console.error('Error adding HSN code:', error)
       if (error.response?.status === 409) {
         alert('HSN code already exists!')
       } else {
-        alert('Failed to add HSN code')
+        alert(`Failed to add HSN code: ${error.message}`)
       }
     }
   }
@@ -108,22 +113,20 @@ export const useProductManagement = () => {
       return
     }
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-try {
-  const res = await axios.post(`${API_URL}/api/units`, {
-    name: newUnitName.trim()
-  })
-
+    try {
+      const res = await axios.post(`${API_URL}/api/units`, {
+        name: newUnitName.trim()
+      })
       setUnits(prev => [...prev, res.data.name].sort())
       setNewUnitName('')
       setShowAddUnit(false)
       alert('Unit added successfully!')
     } catch (error) {
+      console.error('Error adding unit:', error)
       if (error.response?.status === 409) {
         alert('Unit already exists!')
       } else {
-        alert('Failed to add unit')
+        alert(`Failed to add unit: ${error.message}`)
       }
     }
   }
