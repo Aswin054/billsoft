@@ -273,7 +273,11 @@ const InvoiceTemplate = forwardRef(({ billData, companyData, partnerData }, ref)
 
         {/* Amount in Words and Summary */}
         <div className="summary-section">
-          <div className="amount-in-words">
+          <div className="amount-in-words"
+          style={{
+      backgroundColor: '#ffffff',
+      color: '#000000'
+    }}>
             <span className="words-label">Total Invoice Amounts in Words</span>
             <div className="words-value">{calculateAmountInWords(billData.grand_total)}</div>
           </div>
